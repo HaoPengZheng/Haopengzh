@@ -1,0 +1,39 @@
+@gray:rgb(232, 232, 232);
+.border_gray {
+  border:1px solid @gray;
+}
+.header{
+  display: flex;
+  line-height: 64px;
+  justify-content: space-around;
+  align-content: center;
+  border:1px solid @gray;
+  .menu{
+    line-height: 64px;
+    font-size: 1.0rem;
+    border-bottom: 0;
+  }
+  .logo{
+    flex-shrink: 2;
+  }
+  .usermenu{
+    
+  }
+  
+}
+
+@media screen and (max-width: 960px){
+  .header{
+    .menu{
+      line-height: 64px;
+      font-size: 1.0rem;
+    }
+    .logo{
+      display: none;
+    }
+    .usermenu{
+  
+    }
+    
+  }
+}
