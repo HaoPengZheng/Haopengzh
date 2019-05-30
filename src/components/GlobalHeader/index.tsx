@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Menu, Icon, Input } from 'antd';
+import { Menu, Input } from 'antd';
 import Logo from '../GlobalLogo/index'
-import UserMenu from '../UserMenu'
+import GlobalUser from '../GlobalUser/GlobalUser'
 import styles from './index.less'
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 import router from 'umi/router';
 const Search = Input.Search;
 export interface GlobalHeaderProps {
@@ -16,8 +14,10 @@ class GlobalHeader extends Component<GlobalHeaderProps>{
     current: 'mail',
   }
 
+  doSearch = () =>{
+
+  }
   handleClick = (e: any) => {
-    console.log('click ', e);
     this.setState({
       current: e.key,
     });
@@ -44,11 +44,11 @@ class GlobalHeader extends Component<GlobalHeaderProps>{
         <div>
           <Search
             placeholder="搜索"
-            onSearch={(value:any) => console.log(value)}
+            onSearch={this.doSearch}
             style={{ width: 200 }}
           />
         </div>
-        <UserMenu></UserMenu>
+        <GlobalUser username="zhp" password="123" remember={false} />
       </div>)
   }
 }
