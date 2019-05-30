@@ -1,0 +1,49 @@
+@gray:rgb(232, 232, 232);
+.write_warp{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: relative;
+  .editor{
+    overflow-x: hidden;
+    width:40vw;
+  }
+  .render{
+    width:60vw;
+    padding: 10px 20px;
+    overflow:scroll;
+    height: calc(100vh - 106px);
+  }
+  .btn_control{
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+    z-index: 99;
+    height: 40px;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top:1px solid @gray;
+    .btn_control_editor{
+
+    }
+    .btn_control_action{
+      height: 40px;
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+    }
+  }
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  outline: none;
+}
+::-webkit-scrollbar {
+  width: .6rem;
+  height: .6rem;
+}
+.markdown-body{
+  text-align: left;
+}

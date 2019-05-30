@@ -43,8 +43,8 @@ class GlobalHeader extends Component<GlobalHeaderProps>{
         </Menu>
         <div>
           <Search
-            placeholder="input search text"
-            onSearch={value => console.log(value)}
+            placeholder="搜索"
+            onSearch={(value:any) => console.log(value)}
             style={{ width: 200 }}
           />
         </div>
