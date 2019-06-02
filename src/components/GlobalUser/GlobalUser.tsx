@@ -1,23 +1,59 @@
-import React, { Component } from 'react'
-import { Checkbox, Form, Icon, Input, Button, Modal } from 'antd'
+import React, { Component, FormEvent } from 'react'
+import { Checkbox, Form, Icon, Input, Button, Modal, notification } from 'antd'
 import { FormComponentProps } from 'antd/lib/form';
+import { connect } from "dva";
+import { GlobalState, UmiComponentProps } from "@/common/type";
 import UserMenu from '../UserMenu'
 
 interface IGlobalUserProps extends FormComponentProps {
-  username: string;
+  email: string;
   password: string;
   remember: boolean
 }
 export type IGlobalUserState = {
-  isLogin: Boolean,
   loginModalVisible: Boolean
-
 }
 
-class GlobalUser extends Component<IGlobalUserProps, IGlobalUserState>{
+import { ConnectState } from '@/models/connect'
+const mapStateToProps = (state: ConnectState) => { return { ...state.login } }
+type PageStateProps = ReturnType<typeof mapStateToProps>;
+type GlobalUserProps = IGlobalUserProps & PageStateProps & UmiComponentProps;
+
+
+const loginSuccessNotification = () => {
+  notification.open({
+    message: '登录成功',
+    type:'success',
+    description:
+      '欢迎你',
+    onClick: () => {
+      console.log('Notification Clicked!');
+    },
+  });
+};
+
+
+class GlobalUser extends Component<GlobalUserProps, IGlobalUserState>{
   state = {
-    isLogin: true,
     loginModalVisible: false
+  }
+
+  handleLogin = async (values:any) => {
+    await this.props.dispatch({ type: 'login/login', payload: values })
+    if(this.props.status.isLogin){
+      loginSuccessNotification()
+      this.props.dispatch({type:'user/fetchUserInfo'})
+      this.setState({loginModalVisible:false})
+    }
+  }
+
+  handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    this.props.form.validateFields((err: any, values: IGlobalUserProps) => {
+      if (!err) {
+        this.handleLogin(values)
+      }
+    })
   }
 
   handleShowLoginModal = () => {
@@ -34,10 +70,10 @@ class GlobalUser extends Component<IGlobalUserProps, IGlobalUserState>{
       onCancel={this.handleLoginModalCancel}
       footer={null}
     >
-      <Form className="login-form">
+      <Form className="login-form" onSubmit={this.handleSubmit}>
         <Form.Item>
-          {getFieldDecorator('username', {
-            rules: [{ required: true, message: 'Please input your username!' }],
+          {getFieldDecorator('email', {
+            rules: [{ required: true, message: 'Please input your email!' }],
           })(
             <Input
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -58,7 +94,7 @@ class GlobalUser extends Component<IGlobalUserProps, IGlobalUserState>{
 
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={this.handleShowLoginModal}>登录</Button>
+          <Button type="primary" htmlType="submit" onClick={this.handleShowLoginModal}>登录</Button>
         </Form.Item>
       </Form>
     </Modal>
@@ -68,7 +104,7 @@ class GlobalUser extends Component<IGlobalUserProps, IGlobalUserState>{
     return (<UserMenu />)
   }
   render() {
-    if (this.state.isLogin) {
+    if (this.props.status.isLogin) {
       return this.renderWhenLogin()
     } else {
       return this.renderWhenLogout()
@@ -76,5 +112,5 @@ class GlobalUser extends Component<IGlobalUserProps, IGlobalUserState>{
   }
 }
 
+export default connect(mapStateToProps)(Form.create<IGlobalUserProps>({})(GlobalUser));
 
-export default Form.create<IGlobalUserProps>({})(GlobalUser);

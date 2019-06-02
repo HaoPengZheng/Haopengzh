@@ -1,8 +1,13 @@
 import { IConfig } from 'umi-types';
+
+import path from 'path'
 // import routes from './config/router.config'
 // ref: https://umijs.org/config/
 const config: IConfig =  {
   treeShaking: true,
+  alias:{
+    '@': path.resolve(__dirname, './src'),
+  },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     ['umi-plugin-react', {
@@ -22,7 +27,7 @@ const config: IConfig =  {
   ],
   "proxy": {
     "/api": {
-      "target": "http://jsonplaceholder.typicode.com/",
+      "target": "http://haopengzh.cn:3001",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     }

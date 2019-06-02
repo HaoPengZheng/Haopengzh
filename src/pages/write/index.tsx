@@ -1,7 +1,4 @@
 import React from 'react'
-
-import ReactMarkdown from 'react-markdown'
-
 import AceEditor from 'react-ace';
 import brace from 'brace';
 import 'brace/mode/markdown';
@@ -14,7 +11,7 @@ import 'github-markdown-css'
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 
-import { Icon,Button } from "antd";
+import { Icon, Button } from "antd";
 
 var Remarkable = require('remarkable');
 var md = new Remarkable({

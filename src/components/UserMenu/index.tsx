@@ -1,5 +1,12 @@
-import React from 'react'
+import React,{Component} from 'react'
 import { Menu, Dropdown, Icon, Avatar } from 'antd';
+import { connect } from "dva";
+import { GlobalState, UmiComponentProps } from "@/common/type";
+
+import { ConnectState } from '@/models/connect'
+const mapStateToProps = (state: ConnectState) => { return { ...state.user } }
+type PageStateProps = ReturnType<typeof mapStateToProps>;
+type GlobalUserProps = PageStateProps & UmiComponentProps;
 
 const menu = (
   <Menu>
@@ -14,15 +21,15 @@ const menu = (
     </Menu.Item>
   </Menu>
 );
-
-export default () => {
-
-  return (
-    <div>
-      <Dropdown overlay={menu} placement="bottomRight">
-        <Avatar size={40} icon="user" />
-      </Dropdown>,
-    </div>
-  )
-
+class GlobalUser extends Component<GlobalUserProps>{
+  render(){
+    return (
+      <div>
+        <Dropdown overlay={menu} placement="bottomRight">
+          <Avatar size={40} src={this.props.profile.picture} />
+        </Dropdown>,
+      </div>
+    )
+  }
 }
+export default connect(mapStateToProps)(GlobalUser)
