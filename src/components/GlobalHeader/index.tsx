@@ -40,7 +40,7 @@ class GlobalHeader extends Component<GlobalHeaderProps>{
           <Logo />
         </div>
         <Menu className={styles.menu} onClick={this.handleClick} selectedKeys={[this.state.current]} mode="horizontal">
-          <Menu.Item key="/home">
+          <Menu.Item key="/">
             🏠网站首页
           </Menu.Item>
           <Menu.Item key="/live">

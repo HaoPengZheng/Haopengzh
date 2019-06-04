@@ -4,6 +4,7 @@ import { FormComponentProps } from 'antd/lib/form';
 import { connect } from "dva";
 import { GlobalState, UmiComponentProps } from "@/common/type";
 import UserMenu from '../UserMenu'
+import store from 'store'
 
 interface IGlobalUserProps extends FormComponentProps {
   email: string;
@@ -36,6 +37,20 @@ const loginSuccessNotification = () => {
 class GlobalUser extends Component<GlobalUserProps, IGlobalUserState>{
   state = {
     loginModalVisible: false
+  }
+
+  componentWillMount(){
+    this.checkIsLogin()
+  }
+
+  checkIsLogin = ()=>{
+    let token = store.get('haopengzh_token')
+    if(token){
+      console.log(token)
+      this.props.dispatch({type:'login/changeLoginStatus',payload:{status:{isLogin:true,token:token}}})
+      this.props.dispatch({type:'user/fetchUserInfo'})
+    }
+   
   }
 
   handleLogin = async (values:any) => {
