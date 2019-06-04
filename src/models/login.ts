@@ -1,7 +1,7 @@
 import { Effect } from './connect'
 import { Reducer } from 'redux';
 import * as loginService from '@/services/loginService'
-
+import store from 'store'
 export interface LoginModelState{
   status:{
     isLogin:false,
@@ -39,14 +39,14 @@ const Model: ModelType = {
       let {email,password} = payload
       const data = yield call(loginService.login,{email,password});
       if(data.data.code == 200){
-        yield window.localStorage.setItem('haopengzh_token',data.data.token)
+        yield store.set('haopengzh_token',data.data.token)
         yield put({type:'changeLoginStatus',payload:{status:{isLogin:true,token:data.data.token}}})
       }
-      yield console.log(data)
     },
   },
   reducers:{
     changeLoginStatus(state,{payload}){
+      console.log(payload)
       return {
         ...state,
         status:payload.status

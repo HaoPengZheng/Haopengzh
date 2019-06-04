@@ -1,8 +1,8 @@
-import request from '../utils/request2'
+import request from '../utils/request'
 import {LoginModel} from '@/common/type'
 export function login(data:LoginModel){
   return request({
-    url:'/login',
+    url:'/api/login',
     method:'post',
     data
   })

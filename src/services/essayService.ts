@@ -1,14 +1,28 @@
-import request from '../utils/request2'
-
+import request from '../utils/request'
 export function feed(){
   return request({
-    url:'/feed',
+    url:'/api/feed',
     method:'get'
   })
 }
-export function essay(){
+export function getEssay(){
   return request({
-    url:'/essay',
+    url:'/api/essay',
     method:'get'
+  })
+}
+
+export function getEssayById(id:string){
+  return request({
+    url:`/api/essay/${id}`,
+    method:'get'
+  })
+}
+
+export function postEssay(data:any){
+  return request({
+    url:'/api/essay',
+    method:'post',
+    data:data
   })
 }

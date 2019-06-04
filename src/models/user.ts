@@ -2,6 +2,7 @@ import { Effect } from './connect'
 import { Reducer } from 'redux';
 import * as userService from '@/services/userService'
 import { string } from 'prop-types';
+import store from 'store'
 
 export interface UserModelState{
   email: string,
@@ -43,6 +44,7 @@ const Model: UserModelType = {
     *fetchUserInfo(_,{call,put,select}){
      let {data} = yield call(userService.getUserInfo)
      yield put({type:'saveUserInfo',payload:data.userInfo})
+     yield store.set('haopengzh_userInfo',data.userInfo)
     },
   
   },

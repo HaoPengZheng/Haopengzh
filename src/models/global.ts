@@ -25,7 +25,7 @@ const GlobalModel: GlobalModelType = {
   },
   effects: {
     *fetchEssay(_,{call,put,select}){
-      const data = yield call(essayService.essay);
+      const data = yield call(essayService.getEssay);
       yield put({
         type:'saveEssay',
         payload:data

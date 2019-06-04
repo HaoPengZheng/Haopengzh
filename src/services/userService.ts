@@ -1,8 +1,8 @@
-import request from '../utils/request2'
+import request from '../utils/request'
 
 export function getUserInfo(){
   return request({
-    url:'/user',
+    url:'/api/user',
     method:'get'
   })
 }
