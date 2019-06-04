@@ -36,9 +36,8 @@ const config: IConfig = {
   ],
   "proxy": {
     "/api": {
-      "target": "http://localhost:3001",
+      "target": "http://haopengzh.cn:3001",
       "changeOrigin": true,
-      "pathRewrite": { "^/api": "" }
     }
   },
   lessLoaderOptions: {
