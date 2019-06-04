@@ -1,11 +1,4 @@
 import React from 'react'
-import AceEditor from 'react-ace';
-import brace from 'brace';
-import 'brace/mode/markdown';
-import 'brace/ext/beautify'
-import 'brace/ext/searchbox';
-import 'brace/theme/github';
-import 'brace/theme/monokai';
 import styles from './index.less'
 import 'github-markdown-css'
 import hljs from 'highlight.js';
@@ -16,9 +9,9 @@ import { Icon, Button } from "antd";
 
 var Remarkable = require('remarkable');
 var md = new Remarkable({
-  html:true,
   highlight: function (str: any, lang: any) {
     // 如果 highlight.js 支持我們編寫的語言
+
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(lang, str).value;
@@ -33,7 +26,8 @@ var md = new Remarkable({
   }
 });
 export interface WriteProps {
-
+  match:any,
+  location:any
 }
 export interface IWriteState {
   renderMd: string,
@@ -43,6 +37,15 @@ class Write extends React.Component<WriteProps, IWriteState>{
   state = {
     renderMd: "hello world",
     editorValue: ""
+  }
+  fetchEssayData = ()=>{
+    let id = this.props.match.params.id
+    essayService.getEssayById(id).then((res:any)=>{
+      this.setState({renderMd:res.data.essay.content})
+    })
+  }
+  componentDidMount(){
+    this.fetchEssayData()
   }
   onChange = (newValue: string) => {
     console.log(md.render(newValue))
@@ -64,38 +67,9 @@ class Write extends React.Component<WriteProps, IWriteState>{
   render() {
     return (
       <div className={styles.write_warp} >
-        <AceEditor
-          className={styles.editor}
-          placeholder="Placeholder Text"
-          mode="markdown"
-          theme="monokai"
-          name="blah2"
-          width="40vw"
-          height="calc(100vh - 106px)"
-          value={this.state.editorValue}
-          style={null}
-          onChange={this.onChange}
-          fontSize={16}
-          showPrintMargin={true}
-
-          highlightActiveLine={true}
-          setOptions={{
-            enableBasicAutocompletion: false,
-            enableLiveAutocompletion: false,
-            enableSnippets: true,
-            showLineNumbers: true,
-            tabSize: 2,
-          }} />
         <div className={styles.render}>
           <div dangerouslySetInnerHTML={{ __html: this.state.renderMd }} className="markdown-body">
-
           </div>
-        </div>
-        <div className={styles.btn_control}>
-          <div className={styles.btn_control_editor}>
-            <Icon type="file-markdown" />
-          </div>
-          <div className={styles.btn_control_action}><Button type="primary" onClick={this.postEssay}>保存</Button></div>
         </div>
       </div>
     )

@@ -22,6 +22,7 @@ interface UserModel {
   },
 };
 
+
 export interface GlobalState {
   counter: CounterModel;
   userInfo:UserModel
