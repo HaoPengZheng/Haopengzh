@@ -23,7 +23,7 @@ const config: IConfig = {
       antd: true,
       dva: true,
       immer: true,
-      dynamicImport: false,
+      dynamicImport: true,
       title: 'myapp',
       dll: false,
 
