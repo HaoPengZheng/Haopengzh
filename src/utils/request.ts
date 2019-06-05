@@ -5,7 +5,7 @@ import store from 'store'
 // import sysConfig from '@/utils/sysConfig'
 
 const service = axios.create({
-  // baseURL: 'http://haopengzh.cn:3001',
+  baseURL:  process.env.NODE_ENV === 'production'?'http://haopengzh.cn:3001':'',
   // baseURL: 'http://192.168.108.125',
   timeout: 30 * 1000
 })
