@@ -4,15 +4,26 @@
   height: 100%;
   display: flex;
   position: relative;
+  moz-user-select: -moz-none;
+-moz-user-select: none;
+-o-user-select:none;
+-khtml-user-select:none;
+-webkit-user-select:none;
+-ms-user-select:none;
+user-select:none;
   .editor{
     overflow-x: hidden;
-    width:40vw;
   }
   .render{
-    width:60vw;
+    flex:1;
     padding: 10px 20px;
     overflow:scroll;
     height: calc(100vh - 106px);
+  }
+  .resize{
+    width: 10px;
+    background: #fff;
+    cursor: ew-resize;
   }
   .btn_control{
     position: fixed;

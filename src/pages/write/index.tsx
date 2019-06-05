@@ -37,12 +37,18 @@ export interface WriteProps {
 }
 export interface IWriteState {
   renderMd: string,
-  editorValue: string
+  editorValue: string,
+  onResize:Boolean,
+  editorStyle:Object
 }
 class Write extends React.Component<WriteProps, IWriteState>{
   state = {
     renderMd: "hello world",
-    editorValue: ""
+    editorValue: "",
+    onResize:false,
+    editorStyle:{
+      width:'40vw'
+    }
   }
   onChange = (newValue: string) => {
     console.log(md.render(newValue))
@@ -61,23 +67,43 @@ class Write extends React.Component<WriteProps, IWriteState>{
       console.log(res)
     })
   }
+  handleMouseMove = (e:any)=>{
+    this.setState({editorStyle: {width:e.clientX+'px'}})
+  }
+  startResize = (e:any) =>{
+    e.persist()
+    console.log('开始')
+    this.setState({onResize:true})
+    document.addEventListener('mousemove',this.handleMouseMove)
+  }
+  endResize = (e:any)=>{
+   
+    console.log(e)
+    if(this.state.onResize){
+      e.persist()
+      this.setState({editorStyle: {width:e.clientX+'px'}})
+      this.setState({onResize:false})
+      document.removeEventListener('mousemove',this.handleMouseMove)
+      console.log('结束')
+    }
+    
+  }
   render() {
     return (
-      <div className={styles.write_warp} >
+      <div className={styles.write_warp} onMouseUp={this.endResize.bind(this)}>
         <AceEditor
           className={styles.editor}
+          style={this.state.editorStyle}
           placeholder="Placeholder Text"
           mode="markdown"
           theme="monokai"
           name="blah2"
-          width="40vw"
           height="calc(100vh - 106px)"
           value={this.state.editorValue}
-          style={null}
           onChange={this.onChange}
           fontSize={16}
           showPrintMargin={true}
-
+          onMouseDown={this.endResize}
           highlightActiveLine={true}
           setOptions={{
             enableBasicAutocompletion: false,
@@ -86,7 +112,9 @@ class Write extends React.Component<WriteProps, IWriteState>{
             showLineNumbers: true,
             tabSize: 2,
           }} />
-        <div className={styles.render}>
+        <div className={styles.resize} onMouseDown={this.startResize} >
+        </div>
+        <div className={styles.render} >
           <div dangerouslySetInnerHTML={{ __html: this.state.renderMd }} className="markdown-body">
 
           </div>
