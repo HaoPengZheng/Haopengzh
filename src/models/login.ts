@@ -34,6 +34,8 @@ const Model: ModelType = {
   effects: {
     *logout(_,{call,put,select}){
      yield console.log('logout')
+     yield store.remove('haopengzh_token')
+     yield put({type:'changeLoginStatus',payload:{status:{isLogin:false,token:undefined}}})
     },
     *login({payload},{call,put,select}){
       let {email,password} = payload

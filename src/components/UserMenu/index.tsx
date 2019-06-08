@@ -11,10 +11,12 @@ type GlobalUserProps = PageStateProps & UmiComponentProps;
 
 class GlobalUser extends Component<GlobalUserProps>{
   handleClick = (e: any) => {
-    this.setState({
-      current: e.key,
-    });
-    router.push(e.key)
+    console.log(e.key)
+    if(e.key == 'logout'){
+      this.props.dispatch({type:'login/logout'})
+    }else{
+      router.push(e.key)
+    }
   };
 
   render() {
@@ -26,8 +28,8 @@ class GlobalUser extends Component<GlobalUserProps>{
         <Menu.Item>
           <Icon type="copy" /> 草稿箱
         </Menu.Item>
-        <Menu.Item>
-          <Icon type="logout" />退出登录
+        <Menu.Item key="logout">
+          <Icon type="logout"  />退出登录
         </Menu.Item>
       </Menu>
     );

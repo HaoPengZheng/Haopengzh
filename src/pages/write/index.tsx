@@ -11,10 +11,32 @@ import 'github-markdown-css'
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import * as essayService from '@/services/essayService'
-
-import { Icon, Button } from "antd";
+import Prompt from 'umi/prompt';
+import { Icon, Button,Modal} from "antd";
+import router from 'umi/router';
 
 var Remarkable = require('remarkable');
+
+
+
+const confirm = Modal.confirm;
+//当离开页面时,询问是否存为草稿箱
+function showConfirmForDraft(location:any) {
+  confirm({
+    title: '确认离开？',
+    content: '您的文章尚未保存，先别走吧？',
+    onOk() {
+      return new Promise((resolve, reject) => {
+        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+      }).catch(() => console.log('Oops errors!'));
+    },
+    onCancel() {
+      console.log(location)
+      router.go(location.href)
+    },
+  });
+}
+
 var md = new Remarkable({
   html:true,
   highlight: function (str: any, lang: any) {
@@ -32,6 +54,7 @@ var md = new Remarkable({
     return "";
   }
 });
+const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 export interface WriteProps {
 
 }
@@ -39,7 +62,7 @@ export interface IWriteState {
   renderMd: string,
   editorValue: string,
   onResize:Boolean,
-  editorStyle:Object
+  editorStyle:Object,
 }
 class Write extends React.Component<WriteProps, IWriteState>{
   state = {
@@ -50,6 +73,8 @@ class Write extends React.Component<WriteProps, IWriteState>{
       width:'40vw'
     }
   }
+
+
   onChange = (newValue: string) => {
     console.log(md.render(newValue))
     this.setState({ editorValue: newValue, renderMd: md.render(newValue) })
@@ -60,7 +85,7 @@ class Write extends React.Component<WriteProps, IWriteState>{
       tag: [],
       time: new Date(),
       isMarkdown: true,
-      content: this.state.renderMd,
+      content: this.state.editorValue,
       isDraft: false,
     }
     essayService.postEssay(essay).then((res:any)=>{
@@ -77,8 +102,6 @@ class Write extends React.Component<WriteProps, IWriteState>{
     document.addEventListener('mousemove',this.handleMouseMove)
   }
   endResize = (e:any)=>{
-   
-    console.log(e)
     if(this.state.onResize){
       e.persist()
       this.setState({editorStyle: {width:e.clientX+'px'}})
@@ -115,7 +138,16 @@ class Write extends React.Component<WriteProps, IWriteState>{
         <div className={styles.resize} onMouseDown={this.startResize} >
         </div>
         <div className={styles.render} >
-          <div dangerouslySetInnerHTML={{ __html: this.state.renderMd }} className="markdown-body">
+        
+      <Prompt
+        when={true}
+        message={(location) => {
+          showConfirmForDraft(location)
+          return false
+        }
+        }
+      />
+            <div dangerouslySetInnerHTML={{ __html: this.state.renderMd }} className="markdown-body">
 
           </div>
         </div>
@@ -123,7 +155,7 @@ class Write extends React.Component<WriteProps, IWriteState>{
           <div className={styles.btn_control_editor}>
             <Icon type="file-markdown" />
           </div>
-          <div className={styles.btn_control_action}><Button type="primary" onClick={this.postEssay}>保存</Button></div>
+          <div className={styles.btn_control_action}><Button type="primary" onClick={this.postEssay} >保存</Button></div>
         </div>
       </div>
     )
@@ -132,3 +164,5 @@ class Write extends React.Component<WriteProps, IWriteState>{
 
 
 export default Write
+
+
