@@ -12,13 +12,17 @@ const config: IConfig = {
   routes: [{
     path: '/', component: '../layouts/index',
     routes: [
-      { path: '/',component: './home'}, 
-      { path: '/essay/:id',component: './essay'},
+      { path: '/write',component:'./write'},
+      {
+      path:'/',component:'../layouts/base',
+      routes:[
+        { path: '/',component: './home'}, 
+        { path: '/essay/:id',component: './essay'},
+      ]},
       
     ],
-   
   },
-    { path: '/write',component:'./write/index'}
+    
   ],
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
