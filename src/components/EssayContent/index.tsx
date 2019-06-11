@@ -48,9 +48,11 @@ class EssayContent extends Component<EssayContentProps>{
           ]}
           extra={
             <img
-              width={200}
+              width={100}
+              style={{display:item.cover||"none"}}
+              height={80}
               alt="logo"
-              src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+              src={item.cover}
             />
           }
         >
