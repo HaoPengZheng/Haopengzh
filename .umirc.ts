@@ -5,10 +5,10 @@ import path from 'path'
 // ref: https://umijs.org/config/
 const config: IConfig = {
   treeShaking: true,
-  externals:{
-    "react":"window.React",
-    "react-dom":"window,ReactDOM"
-  },
+  // externals:{
+  //   "react":"window.React",
+  //   "react-dom":"window,ReactDOM"
+  // },
   // history: 'hash',
   alias: {
     '@': path.resolve(__dirname, './src'),
