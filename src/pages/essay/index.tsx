@@ -5,8 +5,8 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import * as essayService from '@/services/essayService'
 import cheerio from 'cheerio'
-import { Icon, Button } from "antd";
-import { link } from 'fs';
+import { Anchor, Button } from "antd";
+const {Link} = Anchor
 
 var Remarkable = require('remarkable');
 var md = new Remarkable({
@@ -133,9 +133,11 @@ class EssayDetailPage extends React.Component<EssayDeatilProp, EssayDetailState>
   render() {
     let childrenRender = (node:IHNode,index:number)=>{
       if(node.children.length==0){
-        return  (<li  key={index}><a href={node.link}>{node.text}</a></li>)
+        // return  (<li  key={index}><a href={node.link}>{node.text}</a></li>)
+        return (<Link key={index} href={node.link} title={node.text}></Link>)
       }else{
-        return  (<li  key={index}><a href={node.link}>{node.text}</a><ul>{node.children.map(childrenRender)}</ul></li>)
+        // return  (<li  key={index}><a href={node.link}>{node.text}</a><ul>{node.children.map(childrenRender)}</ul></li>)
+        return (<Link key={index} href={node.link} title={node.text}>{node.children.map(childrenRender)}</Link>)
       }
     }
     let catalog = this.state.catalogObject.children.map(childrenRender)
@@ -147,9 +149,12 @@ class EssayDetailPage extends React.Component<EssayDeatilProp, EssayDetailState>
           </div>
         </div>
         <div>
-          <ul className={styles.catalog_list}>
+          {/* <ul className={styles.catalog_list}>
           {catalog}
-          </ul>
+          </ul> */}
+          <Anchor className={styles.catalog_list}>
+            {catalog}
+          </Anchor>
         </div>
       </div>
     )

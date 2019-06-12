@@ -16,7 +16,7 @@ class AnthorInfo extends React.Component {
     return (
       <div>
         <Card
-          style={{ width: 300, marginTop: 16 }}
+          style={{ margin: 16 }}
           actions={[<Icon type="setting" />, <Icon type="edit" />, <Icon type="ellipsis" />]}
         >
           <Skeleton loading={loading} avatar active>
@@ -24,8 +24,8 @@ class AnthorInfo extends React.Component {
               avatar={
                 <Avatar src="http://pswzb45f5.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20190525170234.png" />
               }
-              title="Card "
-              description="This is the description"
+              title="郑浩鹏"
+              description="对酒当歌，人生几何"
             />
           </Skeleton>
         </Card>
