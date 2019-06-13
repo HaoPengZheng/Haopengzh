@@ -3,7 +3,9 @@ import { IConfig } from 'umi-types';
 import path from 'path'
 // import routes from './config/router.config'
 // ref: https://umijs.org/config/
+
 const config: IConfig = {
+  publicPath: "http://www.haopengzh.cn",
   treeShaking: true,
   // externals:{
   //   "react":"window.React",
