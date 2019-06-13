@@ -5,7 +5,7 @@ import path from 'path'
 // ref: https://umijs.org/config/
 
 const config: IConfig = {
-  publicPath: "http://www.haopengzh.cn/",
+  // publicPath: "http://www.haopengzh.cn/",
   treeShaking: true,
   // externals:{
   //   "react":"window.React",
