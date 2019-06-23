@@ -49,11 +49,12 @@ class EssayContent extends Component<EssayContentProps>{
           extra={
             <img
               width={100}
-              style={{display:item.cover||"none"}}
+              style={{display:item.cover?"block":"none"}}
               height={80}
               alt="logo"
               src={item.cover}
             />
+         
           }
         >
           <List.Item.Meta

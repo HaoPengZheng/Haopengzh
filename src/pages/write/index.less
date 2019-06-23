@@ -21,6 +21,18 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .header_action{
+      display: flex;  
+      align-items: center;
+      font-size: 1.0rem;
+      white-space: nowrap;
+      color: #c9c9c9;
+      cursor: default;  
+      margin-right: 60px;
+      .upload_img{
+        padding-right: 40px;
+      }
+    }
     .title{
       padding-left: 20px;
       .title_input{
@@ -90,14 +102,24 @@
       justify-content: space-between;
       border-top     : 1px solid @gray;
 
-      .btn_control_editor {}
-
+      .btn_control_editor {
+        display: flex;
+        
+      }
       .btn_control_action {
         height      : 40px;
         display     : flex;
         align-items : center;
         margin-right: 20px;
+        .btn_draft{
+          margin-right: 28px;
+          font-size: 1.334rem;
+          white-space: nowrap;
+          color: #ddd;
+          cursor: default;
+        }
       }
+     
     }
   }
 

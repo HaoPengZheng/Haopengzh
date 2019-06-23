@@ -12,10 +12,12 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import * as essayService from '@/services/essayService'
 import Prompt from 'umi/prompt';
-import { Icon, Button, Modal } from "antd";
+import { Icon, Button, Modal,message } from "antd";
 import router from 'umi/router';
 import GlobalUser from '@/components/GlobalUser/GlobalUser'
+import { Upload, Popover } from 'antd';
 import cheerio from 'cheerio'
+import * as qiniuService from '@/services/qiniuService'
 var Remarkable = require('remarkable');
 
 
@@ -55,53 +57,72 @@ var md = new Remarkable({
     return "";
   }
 });
-const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 export interface WriteProps {
 
 }
+
 export interface IWriteState {
-  title:string,
+  title: string,
   renderMd: string,
-  cover:string,
+  cover: string,
+  previewImg:string,
   editorValue: string,
   onResize: Boolean,
   editorStyle: Object,
+  converUploadLoadding:boolean,
+  upload_token:string
 }
+
+function getBase64(img:Blob, callback:Function) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+
+
 class Write extends React.Component<WriteProps, IWriteState>{
   state = {
-    title:"",
+    title: "",
     renderMd: "hello world",
     editorValue: "",
-    cover:"",
+    previewImg:'',
+    cover: "",
+    coverKey:"nothing",
     onResize: false,
     editorStyle: {
       width: '40vw'
     },
+    converUploadLoadding:false,
+    upload_token:''
   }
 
-
+  componentDidMount(){
+    this.getQiniuUploadToken()
+  }
   onChange = (newValue: string) => {
     console.log(md.render(newValue))
     this.setState({ editorValue: newValue, renderMd: md.render(newValue) })
   }
 
-  getHtmlByObj = (refElement:any) =>{
+  getHtmlByObj = (refElement: any) => {
     return refElement.outerHTML
   }
 
-  handleImgPic(){
+  handleImgPic() {
     const $ = cheerio.load(this.state.renderMd)
     let cover = $('img').attr('src')
-    this.setState({cover})
-    console.log($('img').attr('src'))
-    console.log($('div').html())
-    console.log($('h1').html())
+    alert(cover)
+    this.setState({ cover })
+    return cover
   }
   postEssay = () => {
-    this.handleImgPic()
+  
+    if(this.state.cover==""){
+      this.handleImgPic()
+    }
     let essay = {
       title: this.state.title,
-      cover: this.state.cover,
+      cover: this.state.cover==""?this.handleImgPic():this.state.cover,
       tag: [],
       time: new Date(),
       isMarkdown: true,
@@ -109,7 +130,12 @@ class Write extends React.Component<WriteProps, IWriteState>{
       isDraft: false,
     }
     essayService.postEssay(essay).then((res: any) => {
-      console.log(res)
+      if(res.code==201){
+        router.push('/')
+      }else{
+          
+        message.warning(res.err.message)
+      }
     })
   }
   handleMouseMove = (e: any) => {
@@ -130,14 +156,75 @@ class Write extends React.Component<WriteProps, IWriteState>{
       console.log('结束')
     }
   }
+
+  handleCoverUploadChange=(info:any)=>{
+
+    getBase64(info.file.originFileObj, (imageUrl:string) =>
+      this.setState({
+        previewImg:imageUrl,
+        converUploadLoadding: false,
+      }),
+    );
+  }
+  getQiniuUploadToken = ()=>{
+    
+      qiniuService.getQiniuToken().then((res:any)=>{
+        this.setState({upload_token:res.data.token})
+      })
+  
+  }
+  getToken = async()=>{
+    let upload_token= await this.getQiniuUploadToken()
+    return upload_token
+  }
+  getUpLoadData = ()=>{
+    let coverKey = new Date().getTime()+Math.floor(Math.random()*10000000000).toString()
+    this.setState({cover:'http://static.haopengzh.cn/'+coverKey})
+    return {
+      token:this.state.upload_token,
+      key:coverKey
+    }
+  }
+  handleBeforeCoverUpload = (file:any)=>{
+    return true
+  }
   render() {
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.converUploadLoadding ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
+    const imageUrl = this.state.previewImg
+        /* {imageUrl?<img src={imageUrl} alt="avatar" width="200" height="200" />:uploadButton} */
+    const uploadCover = (
+      <Upload
+      name="file"
+      beforeUpload={this.handleBeforeCoverUpload}
+      listType="picture-card"
+      className="avatar-uploader"
+      showUploadList={false}
+      data={this.getUpLoadData}
+      action="http://up-z2.qiniup.com"
+      onChange={this.handleCoverUploadChange}
+    >
+  
+      {imageUrl?<img src={imageUrl} alt="avatar" width="200" height="200" />:uploadButton}
+    </Upload>)
     return (
       <div className={styles.write_warp} onMouseUp={this.endResize.bind(this)}>
         <div className={styles.header}>
           <div className={styles.title}>
-            <input className={styles.title_input} onChange={(e)=>{this.setState({title:e.target.value})}} value={this.state.title} placeholder="请输入文章标题.."/>
+            <input className={styles.title_input} onChange={(e) => { this.setState({ title: e.target.value }) }} value={this.state.title} placeholder="请输入文章标题.." />
           </div>
-          <GlobalUser/>
+          <div className={styles.header_action}>
+            <div className={styles.upload_img} style={{ margin: "10px" }}>
+              <Popover content={uploadCover}>
+                上传文章封面<Button type="link" ><Icon type="picture" style={{ fontSize: '1.2rem' }} /></Button>
+              </Popover>
+            </div>
+            <GlobalUser />
+          </div>
         </div>
         <div className={styles.editor_warp}>
           <AceEditor
@@ -181,7 +268,10 @@ class Write extends React.Component<WriteProps, IWriteState>{
           <div className={styles.btn_control_editor}>
             <Icon type="file-markdown" />
           </div>
-          <div className={styles.btn_control_action}><Button type="primary" onClick={this.postEssay} >保存</Button></div>
+          <div className={styles.btn_control_action}>
+            <div className={styles.btn_draft} style={{ margin: "10px" }}>文章将会自动保存到草稿。<Button>草稿箱</Button></div>
+            <div ><Button type="primary" onClick={this.postEssay} >保存</Button></div>
+          </div>
         </div>
       </div>
     )
