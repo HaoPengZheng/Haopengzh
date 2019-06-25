@@ -45,7 +45,7 @@ class AnthorInfo extends React.Component {
               title="郑浩鹏"
               description="对酒当歌，人生几何。"
             />
-            {/* <div>目前在前端入门的道路上跌打滚爬，期盼加入一个大家庭，一起成长一起努力。如果有合适的机会，请联系我。haopengzh@gmail.com</div> */}
+            {/* <div>目前在前端入门的道路上跌打滚爬，期盼加入一个大家庭，一起成长一起努力。如果有合适的机会，请联系我。haopengzh@gmail.com</div>     */}
           </Skeleton>
         </Card>
       </div>

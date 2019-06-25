@@ -24,21 +24,7 @@ var Remarkable = require('remarkable');
 
 const confirm = Modal.confirm;
 //当离开页面时,询问是否存为草稿箱
-function showConfirmForDraft(location: any) {
-  confirm({
-    title: '确认离开？',
-    content: '您的文章尚未保存，先别走吧？',
-    onOk() {
-      return new Promise((resolve, reject) => {
-        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-      }).catch(() => console.log('Oops errors!'));
-    },
-    onCancel() {
-      console.log(location)
-      router.go(location.href)
-    },
-  });
-}
+
 
 var md = new Remarkable({
   html: true,
@@ -96,6 +82,23 @@ class Write extends React.Component<WriteProps, IWriteState>{
     upload_token:''
   }
 
+   showConfirmForDraft(location: any) {
+  
+    confirm({
+      title: '确认离开？',
+      content: '您的文章尚未保存，先别走吧？',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+        }).catch(() => console.log('Oops errors!'));
+      },
+      onCancel() {
+        console.log(location)
+        router.go(location.href)
+      },
+    });
+  }
+
   componentDidMount(){
     this.getQiniuUploadToken()
   }
@@ -130,11 +133,11 @@ class Write extends React.Component<WriteProps, IWriteState>{
       isDraft: false,
     }
     essayService.postEssay(essay).then((res: any) => {
-      if(res.code==201){
+      if(res.data.code==201){
+        message.success('发布成功!')
         router.push('/')
       }else{
-          
-        message.warning(res.err.message)
+        message.warning(res.data.err.message)
       }
     })
   }
@@ -226,7 +229,7 @@ class Write extends React.Component<WriteProps, IWriteState>{
             <GlobalUser />
           </div>
         </div>
-        <div className={styles.editor_warp}>
+        <div className={styles.editor_warp} onMouseDown={this.endResize}>
           <AceEditor
             className={styles.editor}
             style={this.state.editorStyle}
@@ -239,7 +242,6 @@ class Write extends React.Component<WriteProps, IWriteState>{
             onChange={this.onChange}
             fontSize={16}
             showPrintMargin={true}
-            onMouseDown={this.endResize}
             highlightActiveLine={true}
             setOptions={{
               enableBasicAutocompletion: false,
@@ -255,7 +257,7 @@ class Write extends React.Component<WriteProps, IWriteState>{
             <Prompt
               when={true}
               message={(location) => {
-                showConfirmForDraft(location)
+                this.showConfirmForDraft(location)
                 return false
               }
               }
