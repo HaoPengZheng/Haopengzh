@@ -16,7 +16,6 @@ export function getOWQiniuToken(data:Object){
 }
 
 export function deleteFile(key:string,token:string){
-  alert(key)
   return request({
     url:'http://up-z2.qiniup.com/delete'+key,
     method:'post',

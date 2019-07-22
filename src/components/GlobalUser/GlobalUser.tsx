@@ -109,11 +109,13 @@ class GlobalUser extends Component<GlobalUserProps, IGlobalUserState>{
 
         </Form.Item>
         <Form.Item>
+        <a href="https://github.com/login/oauth/authorize?client_id=65ad12146e7e3487e139">github</a>
           <Button type="primary" htmlType="submit" onClick={this.handleShowLoginModal}>登录</Button>
         </Form.Item>
       </Form>
     </Modal>
-      <Button type="primary" onClick={this.handleShowLoginModal}>登录</Button></div>)
+
+    <Button type="primary" onClick={this.handleShowLoginModal}>登录</Button></div>)
   }
   renderWhenLogin = () => {
     return (<UserMenu />)

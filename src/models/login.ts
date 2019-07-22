@@ -43,6 +43,8 @@ const Model: ModelType = {
       if(data.data.code == 200){
         yield store.set('haopengzh_token',data.data.token)
         yield put({type:'changeLoginStatus',payload:{status:{isLogin:true,token:data.data.token}}})
+      }else{
+        yield put({type:'login/logout'})
       }
     },
   },

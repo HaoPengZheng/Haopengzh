@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from 'store'
+import { Dispatch } from "redux";
 // import router from '@/router'
 
 // import sysConfig from '@/utils/sysConfig'
@@ -11,10 +12,11 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(config => {
-  let token = store.get('haopengzh_token')
+  let token = store.get('haopengzh_token') 
   config.headers['Authorization'] ='Bearer '+token;
   return config
 }, error => {
+  console.log(error)
   return Promise.reject(error)
 })
 
@@ -25,10 +27,16 @@ service.interceptors.response.use(
   error => {
     let msg = ''
     try {
-
       msg = error.response.data.message
     } catch (e) {
       msg = error.message
+    }
+    if(error.response){
+      switch(error.response.status){
+        case 401:{
+
+        }
+      }
     }
     return Promise.reject(error)
   })

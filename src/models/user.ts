@@ -43,6 +43,7 @@ const Model: UserModelType = {
   effects: {
     *fetchUserInfo(_,{call,put,select}){
      let {data} = yield call(userService.getUserInfo)
+     console.log(data)
      yield put({type:'saveUserInfo',payload:data.userInfo})
      yield store.set('haopengzh_userInfo',data.userInfo)
     },

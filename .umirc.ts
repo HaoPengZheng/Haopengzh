@@ -23,6 +23,7 @@ const config: IConfig = {
       path:'/',component:'../layouts/base',
       routes:[
         { path: '/',component: './home'}, 
+        { path: '/auth',component: './auth'},
         { path: '/essay/:id',component: './essay'},
       ]},
       

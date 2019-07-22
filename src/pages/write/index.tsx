@@ -114,7 +114,6 @@ class Write extends React.Component<WriteProps, IWriteState>{
   handleImgPic() {
     const $ = cheerio.load(this.state.renderMd)
     let cover = $('img').attr('src')
-    alert(cover)
     this.setState({ cover })
     return cover
   }
@@ -254,14 +253,14 @@ class Write extends React.Component<WriteProps, IWriteState>{
           </div>
           <div className={styles.render} >
 
-            <Prompt
+            {/* <Prompt
               when={true}
               message={(location) => {
                 this.showConfirmForDraft(location)
                 return false
               }
               }
-            />
+            /> */}
             <div dangerouslySetInnerHTML={{ __html: this.state.renderMd }} className="markdown-body" >
             </div>
           </div>
